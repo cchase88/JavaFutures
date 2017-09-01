@@ -3,18 +3,18 @@ import ServiceLocator.Services.Interfaces.Downloader;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.concurrent.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
 
-
-
         DownloaderLocator dl = ServiceLocator.locator();
         Downloader downloader = dl.getDownloader();
 
-        downloader.setUrl("https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json");
+        downloader.setUrl("https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.txt");
 
         ExecutorService es = Executors.newSingleThreadExecutor();
         Future<String> future = es.submit(downloader);
@@ -26,9 +26,13 @@ public class Main {
         }
         System.out.println("Future completed.");
 
-        File output = new File("dictionary.json");
-        FileWriter fw = new FileWriter(output);
-        fw.write(future.get());
+        File outputFile = new File("dictionary.txt");
+        FileWriter fw = new FileWriter(outputFile);
+        String output = future.get();
+
+        fw.write(output);
+        fw.flush();
+        fw.close();
 
         System.exit(1);
 

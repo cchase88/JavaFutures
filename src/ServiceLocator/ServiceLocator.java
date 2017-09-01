@@ -5,6 +5,13 @@ import ServiceLocator.Services.Implementations.UrlDownloader;
 
 import java.io.File;
 
+/*
+This class is based upon Martin Fowler's article on Dependency Injection:
+
+https://martinfowler.com/articles/injection.html#UsingAServiceLocator
+
+https://martinfowler.com/articles/injection.html#UsingASegregatedInterfaceForTheLocator
+ */
 public class ServiceLocator implements DownloaderLocator, FileFinder{
 
     private static ServiceLocator soleInstance;
@@ -24,10 +31,13 @@ public class ServiceLocator implements DownloaderLocator, FileFinder{
     @Override
     public Downloader getDownloader() {
 
+        /*
+        The downloader provided by the ServiceLocater will be a UrlDownloader.
+         */
         UrlDownloader urlDownloader = new UrlDownloader();
-        urlDownloader.setSleep(250);
-        urlDownloader.setBuffSize(18000);
-        urlDownloader.setWorkers(32);
+        urlDownloader.setSleep(10);
+        urlDownloader.setBuffSize(16384);
+        urlDownloader.setWorkers(10);
 
         return urlDownloader;
     }
